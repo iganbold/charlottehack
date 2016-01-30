@@ -1,0 +1,280 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/neon-animation/neon-shared-element-animatable-behavior.html">
+<link rel="import" href="../../bower_components/neon-animation/animations/hero-animation.html">
+<link rel="import" href="../../bower_components/neon-animation/animations/fade-out-animation.html">
+<link rel="import" href="../../bower_components/neon-animation/animations/fade-in-animation.html">
+<link rel="import" href="../../bower_components/neon-animation/animations/slide-from-right-animation.html">
+<link rel="import" href="../../bower_components/neon-animation/animations/slide-right-animation.html">
+<link rel="import" href="../../bower_components/neon-animation/animations/slide-left-animation.html">
+<link rel="import" href="../../bower_components/iron-label/iron-label.html">
+<link rel="import" href="../../bower_components/iron-list/iron-list.html">
+
+<link rel="import" href="../../bower_components/paper-drawer-panel/paper-drawer-panel.html">
+<link rel="import" href="../../bower_components/paper-fab/paper-fab.html">
+
+<link href='https://fonts.googleapis.com/css?family=Roboto+Condensed:300' rel='stylesheet' type='text/css'>
+
+<!--<linK rel="import" href="../../bower_components/paper-button/paper-button.html">-->
+
+<dom-module id="create-page">
+  <template>
+    <style is="custom-style">
+      :host {
+        display: flex;
+        font-family: 'Roboto Condensed', sans-serif;
+      }
+      
+      paper-drawer-panel {
+
+        --paper-drawer-panel-main-container: {
+          /*width: 63%;*/
+          background-color: #69F0AE;
+        }
+        
+        --paper-drawer-panel-drawer-container: {
+          
+        }
+        
+        --paper-drawer-panel-left-drawer-container: {
+          background-color: white;
+        };
+      }
+      
+      #drawerSide {
+        height: 100%;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        
+      }
+      
+      mainSide {
+        height: 100%;
+        width: 100%;
+      }
+      
+      .big {
+        --iron-icon-height: 48px;
+        --iron-icon-width: 48px;
+        --iron-icon-fill-color: #ff8a65;
+      }
+      
+      .major-form {
+         display: -webkit-flex;
+         display: flex;
+         -webkit-flex-direction: column; 
+         flex-direction: column;
+         /*-webkit-align-items: flex-start;*/
+         width: 80%;
+         align-items: flex-start;
+         padding-bottom: 250px;
+      }
+      
+      #major-title {
+        font-size: 48px;
+        color: #333;
+        padding-bottom: 25px;
+      }
+      
+      #major-desc {
+        color: #9e9ea6;
+        font-size: 20px;
+        height: 48px;
+        
+      }
+      
+      #major-input {
+        width: 100%;
+        font-size: 25px; 
+      }
+
+      /*#18be8c*/
+      #mainToolbar {
+        --paper-toolbar-background: #ff8a65; 
+      }
+      
+      #mainSide {
+        height: 100%;
+        background-color: #ff8a65;
+      }
+      
+      #drawer-toolbar {
+        background-color: white;
+      }
+      
+      #drawer-major-bottom {
+        display: -webkit-flex;
+        display: flex;
+        -webkit-flex-direction: column; 
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      #bullets {
+        padding-top: 25px;
+      }
+       
+      #bullets .bullet {
+        font-size: 35px;
+        color: #babbbf;
+        padding-right: .1875rem;
+      }
+      
+      #bullets .bullet.active {
+          color: #434245;
+      }
+      
+      #nextBtn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        color: white;
+        font-size: 20px;
+        background: rgb(42, 178, 123);
+        padding-top: 14px;
+        padding-right: 2pc;
+        padding-bottom: 1pc;
+        padding-left: 2pc;
+      }
+      
+      #logo-text {
+        font-weight: bold;
+        font-size: 26px;
+        color: #333;
+      }
+      
+      a {
+        display: inline-block;
+        text-decoration:none
+      }
+    </style>
+    <!--//responsive-width="1024px"-->
+    <!--max-width: 624px;
+        min-width: 486px;-->
+    <paper-drawer-panel drawer-width="37%">
+      <paper-header-panel drawer>
+        <paper-toolbar id="drawer-toolbar">
+          <iron-label id="logo-text">
+            <iron-icon class="big" icon="weekend"></iron-icon> student.io
+          </iron-label>
+        </paper-toolbar>
+        <div id="drawerSide">
+          
+          <div class="major-form"> 
+          
+            <iron-label id="major-title">
+              What major would you like to pick?
+            </iron-label>
+            
+            <iron-label id="major-desc">
+              Your major should be something that you passion about.
+            </iron-label>
+            
+            <paper-input id="major-input" label="Major" list="majorList"></paper-input>
+            <datalist id="majorList">
+              <template is="dom-repeat" items={{dataTest}}>
+                <option> {{item.major}}
+              </template>
+            </datalist>
+            
+          </div>
+          
+          <div id="drawer-major-bottom">
+            <a data-route="concentration" href="{{baseUrl}}concentration">
+              <!--<paper-button id="nextBtn" on-tap="nextPage" raised>-->
+              <!--  Next   <iron-icon icon="chevron-right"></iron-icon>-->
+              <!--</paper-button>-->
+              <paper-fab icon="arrow-forward"></paper-fab>
+            </a>
+            <!--<template is="dom-repeat" items="{{datas}}">-->
+            <!--  <h1>{{item.name}}</h1>-->
+            <!--</template>-->
+            <div id="bullets">
+              <span id="bullet1" class="bullet">•</span>
+              <span id="bullet2" class="bullet active">•</span>
+              <span id="bullet3" class="bullet">•</span>
+            </div>
+          </div>
+        </div>
+      </paper-header-panel>
+      <paper-header-panel main>
+        
+        <paper-toolbar id="mainToolbar"></paper-toolbar>
+        <div id="mainSide">
+          <div style="color: white">
+              <!--Major Section-->
+          </div> 
+          <div id="hero"> </div>
+        </div>
+      </paper-header-panel>
+    </paper-drawer-panel>
+  </template>
+  
+  <script>
+  (function() {
+    'use strict';
+
+    Polymer({
+      is: 'create-page',
+      behaviors: [Polymer.NeonSharedElementAnimatableBehavior],
+      properties: {
+        datas: Array,
+        dataTest: {
+          notify: true,
+          value: function() {
+            return [
+              {'major': 'Computer Science (B.A.)'},
+              {'major': 'Computer Science (B.S.)'},
+              {'major': 'Accounting'},
+              {'major': 'Architecture (B.A.)'},
+              {'major': 'Biology (B.S.)'},
+              {'major': 'Computer Science (B.A.) -SIS Department '},
+              {'major': 'Construction Management'}
+            ];
+          },
+        },
+        animationConfig: {
+          value: function() {
+            return {
+              'entry': [{
+                name: 'hero-animation',
+                id: 'hero',
+                toPage: this
+              }, {
+                name: 'slide-from-right-animation',
+                node: this
+              }],
+              'exit': {
+                name: 'fade-out-animation',
+                node: this
+              }
+            };
+          }
+        },
+        
+        sharedElements: {
+          value: function() {
+            return {
+              'hero': this.$.he
+            };
+          }
+        }
+      },
+      
+    });
+  })();
+  </script>
+</dom-module>

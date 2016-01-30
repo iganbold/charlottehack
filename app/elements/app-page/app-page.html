@@ -1,0 +1,345 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<link rel="import" href="../../bower_components/neon-animation/neon-shared-element-animatable-behavior.html">
+<link rel="import" href="../../bower_components/neon-animation/neon-animated-pages.html">
+<link rel="import" href="../../bower_components/neon-animation/animations/hero-animation.html">
+<link rel="import" href="../../bower_components/neon-animation/animations/fade-out-animation.html">
+<link rel="import" href="../../bower_components/neon-animation/animations/fade-in-animation.html">
+
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+
+<dom-module id="app-page">
+  
+  <link rel="import" href="../../styles/themes/everest/everest.css" type="css">
+  
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+      
+      .content {
+        /*display:flex;*/
+        /*flex-direction: row;*/
+        /*justify-content: center;*/
+        padding: 0 16px;
+      }
+      
+      .pipe {
+        background-color: #cdcdcd;
+        height: 100%;
+        padding-top: 2px;
+        position: absolute;
+        top: -1px;
+        right: auto;
+        bottom: auto;
+        left: 18px;
+        width: 2px;
+        z-index: 10;
+        /*margin-top: -44px;*/
+        margin-left: 11px;
+      }
+      
+      .pipe.after {
+        margin-top: 15px;
+        /*background-color: pink;*/
+      }
+      
+      .pipe.before {
+        margin-top: -15px;
+        background-color: rgb(69, 173, 168);
+      }
+      
+      .pipe.middle {
+        background-color: rgb(69, 173, 168);
+        margin-top: -15px;
+      }
+      
+      peper-item {
+        font-weight: 400;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        position: relative;
+      }
+      
+      paper-menu {
+          display: block;
+          padding: 8px 0;
+          background: inherit;
+      }
+      /*#bdbdbd;*/
+      i {
+          display: inline-block;
+          font-style: normal;
+          width: 24px;
+          min-width: 24px;
+          background: #fff;
+          border-radius: 50%;
+          text-align: center;
+          height: 24px;
+          vertical-align: middle;
+          line-height: 24px;
+          border: 2px solid rgb(69, 173, 168);
+          margin-right: 8px;
+          font-weight: 400;
+          z-index: 20;
+      }
+      
+      div#cards {
+        display: -webkit-flex;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        /*justify-content: space-round;*/
+        /*width: 100%;*/
+      }
+      semester-card {
+        /*margin: 16px;*/
+        padding-left: 26px;
+      }
+      
+      .twoColumns {
+        @apply(--layout-flex);
+        @apply(--layout-horizontal);
+        overflow: hidden;
+      }
+      
+      
+    </style>
+    <!--drawer-width="{{drawerWidth}}"-->
+    <paper-drawer-panel responsive-width="1280px" >
+      <paper-header-panel drawer>
+        <paper-toolbar>
+          <div><h3>Menu</h3></div>
+        </paper-toolbar>
+        <div>
+          <paper-menu id="menu" on-iron-select="selectPage" selected="0">
+            
+            <!--<a data-route = "all" href="{{baseUrl}}all">-->
+              <paper-item>
+                <i>A</i> Plan
+              </paper-item>
+            <!--</a>-->
+            <paper-item>
+              <i>1</i> Semester
+              <div class="pipe after"></div>
+            </paper-item>
+            <paper-item>
+              <div class="pipe middle"></div>
+              <i>2</i> Semester
+              </paper-item>
+            <paper-item>
+              <div class="pipe middle"></div>
+              <i>3</i> Semester
+            </paper-item>
+            <paper-item>
+              <div class="pipe middle"></div>
+              <i>4</i> Semester
+            </paper-item>
+            <paper-item>
+              <div class="pipe middle"></div>
+              <i>5</i> Semester
+            </paper-item>
+            <paper-item>
+              <div class="pipe middle"></div>
+              <i>6</i> Semester
+            </paper-item>
+            <paper-item>
+              <div class="pipe middle"></div>
+              <i>7</i> Semester
+            </paper-item>
+            <paper-item>
+              <div class="pipe before"></div>
+              <i>8</i> Semester
+            </paper-item>
+            <paper-item>
+              <i>T</i> Taken
+            </paper-item>
+          </paper-menu>
+        </div>
+      </paper-header-panel>
+      <!--condenses keep-condensed-header-->
+      <paper-scroll-header-panel fixed main>
+        <paper-toolbar id="mainToolbar">
+          <!--<paper-icon-button icon="menu" paper-drawer-toggle></paper-icon-button>-->
+          <!--<div>Title</div>-->
+          <paper-icon-button id="paperToggle" icon="menu" paper-drawer-toggle></paper-icon-button>
+          <span class="flex"><h3>studentplan.io</h3></span>
+
+          <!-- Toolbar icons -->
+          <paper-icon-button icon="refresh"></paper-icon-button>
+          <paper-icon-button icon="search"></paper-icon-button>
+
+          <!-- Application name -->
+          <div class="middle middle-container center horizontal layout">
+            <!--<div class="app-name">Title</div>-->
+          </div>
+        </paper-toolbar>
+        
+        <!-- Main Content -->
+        <div class="content">
+          
+          <neon-animated-pages class="flex" id="pages" attr-for-selected="data-route" selected="{{route}}">
+            
+            <section data-route="0">
+              <div id="cards">
+                <template is="dom-repeat" items="{{itcs}}">
+                  <semester-card title="Semester 1" semdata={{item.plan.semester1}}></semester-card>
+                  <semester-card title="Semester 2" semdata={{item.plan.semester2}}></semester-card>
+                  <semester-card title="Semester 3" semdata={{item.plan.semester3}}></semester-card>
+                  <semester-card title="Semester 4" semdata={{item.plan.semester4}}></semester-card>
+                  <semester-card title="Semester 5" semdata={{item.plan.semester5}}></semester-card>
+                  <semester-card title="Semester 6" semdata={{item.plan.semester6}}></semester-card>
+                  <semester-card title="Semester 7" semdata={{item.plan.semester7}}></semester-card>
+                  <semester-card title="Semester 8" semdata={{item.plan.semester8}}></semester-card>
+                  
+                </template>
+                
+                <!--<template is="dom-repeat" items="{{itcs}}">-->
+                <!--  <span>{{item.major}}</span>-->
+                <!--  <span>{{item.major}}</span>-->
+                <!--  <span>{{item.concentration}}</span>-->
+                  
+                <!--  <template is="dom-repeat" items="{{item.plan.semester1}}">-->
+                <!--    <span>{{item.cid}}</span>-->
+                <!--  </template>-->
+                <!--</template>-->
+                
+              </div>
+            </section>
+            <template is="dom-repeat" items="{{itcs}}">
+            <section data-route="1">
+                <semester-iron-page semdata={{item.plan.semester1}}>1</semester-iron-page>
+            </section>
+            <section data-route="2">
+                <semester-iron-page semdata={{item.plan.semester2}}>2</semester-iron-page>
+            </section>
+            <section data-route="3">
+                <semester-iron-page semdata={{item.plan.semester3}}>3</semester-iron-page>
+            </section>
+            <section data-route="4">
+                <semester-iron-page semdata={{item.plan.semester4}}>4</semester-iron-page>
+            </section>
+            <section data-route="5">
+                <semester-iron-page semdata={{item.plan.semester5}}>5</semester-iron-page>
+            </section>
+            <section data-route="6">
+                <semester-iron-page semdata={{item.plan.semester6}}>6</semester-iron-page>
+            </section>
+            <section data-route="7">
+                <semester-iron-page semdata={{item.plan.semester7}}>7</semester-iron-page>
+            </section>
+            <section data-route="8">
+                <semester-iron-page semdata={{item.plan.semester8}}>8</semester-iron-page>
+            </section>
+            <section data-route="9">
+                <taken-iron-page></taken-iron-page>  
+            </section>
+            </template>
+          </neon-animated-pages >
+        </div>
+    
+      </paper-header-panel>
+    </paper-scroll-drawer-panel>
+    <iron-media-query query="(max-width: 780px)" query-matches="{{_isMobile}}"></iron-media-query>
+  </template>
+  <script>
+  (function() {
+    'use strict';
+
+    Polymer({
+      is: 'app-page',
+
+      behaviors: [Polymer.NeonSharedElementAnimatableBehavior],
+      
+      properties: {
+        itcs: Object,
+        semesterData: {
+          notify: true,
+          value: function() {
+            return [
+              {'title': 'Semeter 1', 'routeNum': '1'},
+              {'title': 'Semeter 2', 'routeNum': '2'},
+              {'title': 'Semeter 3', 'routeNum': '3'},
+              {'title': 'Semeter 4', 'routeNum': '4'},
+              {'title': 'Semeter 5', 'routeNum': '5'},
+              {'title': 'Semeter 6', 'routeNum': '6'},
+              {'title': 'Semeter 7', 'routeNum': '7'},
+              {'title': 'Semeter 8', 'routeNum': '8'}
+            ];
+          },
+        },
+        animationConfig: {
+          value: function() {
+            return {
+              'entry': [{
+                name: 'hero-animation',
+                id: 'hero',
+                toPage: this
+              }, {
+                name: 'fade-in-animation',
+                node: this
+              }],
+              'exit': {
+                name: 'fade-out-animation',
+                node: this
+              }
+            };
+          }
+        },
+        sharedElements: {
+          value: function() {
+            return {
+              'hero': this.$.mainToolbar
+            };
+          }
+        }
+      },
+      listeners: {
+        'prevSem': 'prevSemester',
+        'nextSem': 'nextSemester',
+        'menuSem': 'menuSemester'
+      },
+      _listTap: function() {
+        this.$.drawerPanel.closeDrawer();
+      },
+      _isMobileChanged: function(isMobile) {
+        this.mainMode = isMobile ? 'seamed' : 'cover';
+        this.drawerWidth = isMobile ? '100%' : '320px';
+        this.toolbarClass = isMobile ? '' : 'tall';
+        this.updateStyles();
+      },
+      
+      selectPage: function(value) {
+        console.log(value.target.selected);
+        this.$.pages.selected = value.target.selected;
+      },
+      
+      nextSemester: function() {
+        console.log('nextSemester');
+        this.$.menu.selectNext();
+      },
+      
+      prevSemester: function() {
+        this.$.menu.selectPrevious();
+      },
+      
+      menuSemester: function(e) {
+        var num = e.target.title.split(' ')[1];
+        this.$.menu.select(num);
+      }
+    });
+  })();
+  </script>
+</dom-module>
